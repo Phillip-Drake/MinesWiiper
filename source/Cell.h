@@ -1,6 +1,5 @@
 #include <wiisprite.h>
-#include "icon_png.h"
-#include "noci_png.h"
+#include "Garf_png.h"
 using namespace wsp;
 
 class Cell {

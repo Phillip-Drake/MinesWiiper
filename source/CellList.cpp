@@ -12,7 +12,7 @@ CellList::CellList(int rows, int columns)
 	cells = new Cell*[rows];
 	for(int i = 0; i < rows; i++)
 			cells[i] = new Cell[columns];
-	unClickedCell.LoadImage(noci_png, IMG_LOAD_TYPE_BUFFER);
+	unClickedCell.LoadImage(Garf_png, IMG_LOAD_TYPE_BUFFER);
 	
 }
 CellList::~CellList() { }
