@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	
 	WPAD_Init();
 	
-	CellList test = CellList(7, 7);
+	CellList test = CellList(20, 20);
 	test.SpawnCells(0);
 	while(1) { 
 	
