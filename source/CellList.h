@@ -14,5 +14,5 @@ class CellList{
 	private :
 		Cell** cells;	
 		int rows, columns;
-		Image unClickedCell;
+		Image unClickedCell, mineCell, oneCell, twoCell, threeCell, fourCell, fiveCell, sixCell, sevenCell, eightCell;
 };

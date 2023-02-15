@@ -1,5 +1,15 @@
 #include <wiisprite.h>
+#include <cstdlib>
 #include "emptyCell_png.h"
+#include "mine_png.h"
+#include "one_png.h"
+#include "two_png.h"
+#include "three_png.h"
+#include "four_png.h"
+#include "five_png.h"
+#include "six_png.h"
+#include "seven_png.h"
+#include "eight_png.h"
 using namespace wsp;
 
 class Cell {
@@ -11,9 +21,13 @@ class Cell {
 	//spawns the cell
 		void Spawn(int x, int y);
 	//sets the image of the sprite
-		void SetImage(Image &image);
+		void SetImages(Image &unclickedImage, Image &mineImage);
 	//Draws the cell
+		void SetMine();
 		void Draw();
+		void IncrementNumMines();
+		int GetNumMines();
+		bool IsMine();
 	//TODO : setMine() incrementNumMines() functions
 	private : 
 	//essential information for a cell, determines it's position,
@@ -24,5 +38,5 @@ class Cell {
 		int x;
 		int y;
 		
-		Sprite sprite;
+		Sprite unclickedSprite, clickedSprite, mineSprite, flagSprite;
 };
