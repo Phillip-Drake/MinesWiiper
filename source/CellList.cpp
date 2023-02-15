@@ -10,7 +10,7 @@ CellList::CellList(int rows, int columns)
 	cells = new Cell*[rows];
 	for(int i = 0; i < rows; i++)
 			cells[i] = new Cell[columns];
-	unClickedCell.LoadImage(one_png, IMG_LOAD_TYPE_BUFFER);
+	unClickedCell.LoadImage(emptyCell_png, IMG_LOAD_TYPE_BUFFER);
 	mineCell.LoadImage(mine_png, IMG_LOAD_TYPE_BUFFER);
 	oneCell.LoadImage(one_png, IMG_LOAD_TYPE_BUFFER);
 	twoCell.LoadImage(two_png, IMG_LOAD_TYPE_BUFFER);
