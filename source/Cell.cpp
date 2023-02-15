@@ -31,7 +31,7 @@ void Cell::SetMine(){
 
 void Cell::IncrementNumMines()
 {
-	numMines = 3;
+	numMines++ ;
 }
 int Cell::GetNumMines()
 {
