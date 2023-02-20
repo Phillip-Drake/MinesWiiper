@@ -6,13 +6,17 @@ class CellList{
 		CellList();
 		CellList(int rows, int columns); 
 		~CellList();
-		void SpawnCells(int bombAmount);
+		void SpawnCells();
+		void SpawnBombs(int BombAmount);
 		void ResetList();
 		void Draw();
-	
-
+		void OverCell(int x, int y);
+		void ClickLastCell();
+		void FlagLastCell();
+		void RecursiveClick(int row, int col);
 	private :
 		Cell** cells;	
 		int rows, columns;
-		Image unClickedCell, mineCell, oneCell, twoCell, threeCell, fourCell, fiveCell, sixCell, sevenCell, eightCell;
+		int lastCell[2];
+		Image unClickedCell, highlightedCell, mineCell, flaggedCell, zeroCell, oneCell, twoCell, threeCell, fourCell, fiveCell, sixCell, sevenCell, eightCell;
 };
