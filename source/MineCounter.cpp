@@ -5,17 +5,21 @@ MineCounter::MineCounter()
 	amount = 0;
 }
 
-MineCounter::MineCounter(int x, int y, int amount)
+MineCounter::MineCounter(int x, int y, int min, int max)
 {
 	this-> x = x;
 	this-> y = y;
-	this-> amount = amount;
+	this-> amount = min;
+	this-> min = min;
+	this-> max = max;
 }
-void MineCounter::Spawn(int x, int y, int amount)
+void MineCounter::Spawn(int x, int y, int min, int max)
 {
 	this->x = x;
 	this->y = y;
-	this->amount = amount;
+	this->amount = min;
+	this-> min = min;
+	this-> max = max;
 }
 void MineCounter::SetImages(Image &num0, Image &num1, Image &num2, Image &num3, Image &num4, Image &num5, Image &num6, Image &num7, Image &num8, Image &num9)
 {
@@ -33,16 +37,16 @@ void MineCounter::SetImages(Image &num0, Image &num1, Image &num2, Image &num3, 
 
 void MineCounter::IncrementAmount()
 {
-	if(amount >= 40)
-		amount = 0;
+	if(amount >= max)
+		amount = min;
 	else
 		amount++;
 }
 
 void MineCounter::DecrementAmount()
 {
-	if(amount <= 0)
-		amount = 40;
+	if(amount <= min)
+		amount = max;
 	else
 		amount--;
 }

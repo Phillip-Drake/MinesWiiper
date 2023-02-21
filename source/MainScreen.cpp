@@ -20,9 +20,9 @@ MainScreen::MainScreen()
 	//load start button images
 
 	//spawn counters
-	heightCounter.Spawn(256, 20, 17);
-	widthCounter.Spawn(256, 100, 34);
-	mineCounter.Spawn(256, 200, 12);
+	heightCounter.Spawn(256, 20, 4, 99);
+	widthCounter.Spawn(256, 100, 4, 99);
+	mineCounter.Spawn(256, 200, 0, 999);
 	//load arrow Images
 	leftArrow.LoadImage(leftArrow_png, IMG_LOAD_TYPE_BUFFER);
 	leftArrowHighlighted.LoadImage(leftArrowHighlighted_png, IMG_LOAD_TYPE_BUFFER);

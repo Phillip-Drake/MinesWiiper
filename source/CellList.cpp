@@ -61,101 +61,88 @@ void CellList::SpawnBombs(int bombAmount)
 			randRow = std::rand() % rows;
 			randCol = std::rand() % columns;
 		}
-		cells[std::rand() % rows][std::rand() % columns].SetMine();
+		cells[randRow][randCol].SetMine();
 	}
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
-				if(!cells[i][j].IsMine()){
-					if(i == 0)
+			if(cells[i][j].IsMine())
+			{
+				//reformed if-then structure in order to minimize comparisons
+				if(i-1 >= 0 && j - 1 >= 0)
+				{
+					cells[i-1][j].IncrementNumMines();
+					cells[i][j-1].IncrementNumMines();
+					cells[i-1][j-1].IncrementNumMines();
+					if(i+1 < rows && j+1 < columns)
 					{
-						if(j == 0)
-						{
-							if(cells[i][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-						}
-						else if(j == columns - 1)
-						{
-							if(cells[i][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-						}
-						else
-						{
-							if(cells[i][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i+1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();	
-						}
+						cells[i+1][j].IncrementNumMines();
+						cells[i+1][j-1].IncrementNumMines();
+						cells[i][j+1].IncrementNumMines();
+						cells[i-1][j+1].IncrementNumMines();
+						cells[i+1][j+1].IncrementNumMines();
 					}
-					else if(i == rows - 1)
+					else if(i+1 < rows)
 					{
-						if(j == 0)
-						{
-							if(cells[i-1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i-1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-						}
-						else if(j == columns - 1)
-						{
-							if(cells[i-1][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i-1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-						}
-						else
-						{
-							if(cells[i-1][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i-1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i-1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-							if(cells[i][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-						}
+						cells[i+1][j].IncrementNumMines();
+						cells[i+1][j-1].IncrementNumMines();
 					}
-					else
+					else if(j+1 < columns)
 					{
-						if(cells[i-1][j-1].IsMine() && j != 0)
-							cells[i][j].IncrementNumMines();
-						if(cells[i-1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-						if(cells[i-1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-						if(cells[i][j-1].IsMine() && j != 0)
-								cells[i][j].IncrementNumMines();
-						if(cells[i][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
-						if(cells[i+1][j-1].IsMine())
-								cells[i][j].IncrementNumMines();
-						if(cells[i+1][j].IsMine())
-								cells[i][j].IncrementNumMines();
-						if(cells[i+1][j+1].IsMine())
-								cells[i][j].IncrementNumMines();
+						cells[i][j+1].IncrementNumMines();
+						cells[i-1][j+1].IncrementNumMines();
 					}
 				}
+				else if(i-1 >= 0)
+				{
+					cells[i-1][j].IncrementNumMines();
+					if(i+1 < rows && j+1 < columns)
+					{
+						cells[i+1][j].IncrementNumMines();
+						cells[i][j+1].IncrementNumMines();
+						cells[i-1][j+1].IncrementNumMines();
+						cells[i+1][j+1].IncrementNumMines();
+					}
+					else if(i+1 < rows)
+					{
+						cells[i+1][j].IncrementNumMines();
+					}
+					else if(j+1 < columns)
+					{
+						cells[i][j+1].IncrementNumMines();
+						cells[i-1][j+1].IncrementNumMines();
+					}
+				}
+				else if(j-1 >= 0)
+				{
+					cells[i][j-1].IncrementNumMines();
+					if(i+1 < rows && j+1 < columns)
+					{
+						cells[i+1][j].IncrementNumMines();
+						cells[i+1][j-1].IncrementNumMines();
+						cells[i][j+1].IncrementNumMines();
+						cells[i+1][j+1].IncrementNumMines();
+					}
+					else if(i+1 < rows)
+					{
+						cells[i+1][j].IncrementNumMines();
+						cells[i+1][j-1].IncrementNumMines();
+					}
+					else if(j+1 < columns)
+					{
+						cells[i][j+1].IncrementNumMines();
+					}
+				}	
+			}
+		}
+	}
+	//requires second loop in order to set cell-images
+	//TODO : Add possibly set images at draw? I'm not actually sure if that would be faster
+	for(int i = 0; i < rows; i++)
+	{
+		for(int j = 0; j < columns; j++)
+		{
 			switch(cells[i][j].GetNumMines())
 				{
 					case 1:

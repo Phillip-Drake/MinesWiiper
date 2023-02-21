@@ -81,10 +81,15 @@ int main(int argc, char **argv) {
 		{
 			if(pressed & WPAD_BUTTON_A)
 			{
-				if(begin.Click())
-					gameRunning = true;
-				justPressed = true;
+				if(!justPressed)
+				{
+					if(begin.Click())
+						gameRunning = true;
+					justPressed = true;
+				}
 			}
+			else
+				justPressed = false;
 			begin.Update(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
 		}
 		cursor.Draw();

@@ -5,8 +5,8 @@ using namespace wsp;
 class MineCounter { 
 	public : 
 		MineCounter();
-		MineCounter(int x, int y, int amount);
-		void Spawn(int x, int y, int amount);
+		MineCounter(int x, int y, int min, int max);
+		void Spawn(int x, int y, int min, int max);
 		void SetImages(Image &num0, Image &num1, Image &num2, Image &num3, Image &num4, Image &num5, Image &num6, Image &num7, Image &num8, Image &num9);
 		void IncrementAmount();
 		void DecrementAmount();
@@ -15,5 +15,5 @@ class MineCounter {
 	private : 
 		Sprite sprites[10]; 
 
-		int x, y, amount;
+		int x, y, amount, min, max;
 };
