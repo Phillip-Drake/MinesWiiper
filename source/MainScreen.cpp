@@ -46,7 +46,7 @@ MainScreen::MainScreen()
 	//load start button images
 	startButton.SetImages(start, startHighlighted);
 	//start button spawning
-	startButton.Spawn(192, 300);
+	startButton.Spawn(256, 352);
 	//load label images
 	widthImage.LoadImage(widthLabel_png, IMG_LOAD_TYPE_BUFFER);
 	heightImage.LoadImage(heightLabel_png, IMG_LOAD_TYPE_BUFFER);
