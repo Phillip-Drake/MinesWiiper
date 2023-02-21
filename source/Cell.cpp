@@ -54,7 +54,7 @@ void Cell::SetMine(){
 	isMine = true;
 }
 
-void Cell::SetZoom()
+void Cell::SetZoom(float zoomFactor)
 {
 	unclickedSprite.SetZoom(zoomFactor);
 	highlightedSprite.SetZoom(zoomFactor);

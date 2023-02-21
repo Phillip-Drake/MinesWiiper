@@ -8,7 +8,7 @@ class CellList{
 		//sets the size of the cellList
 		void SetSize(int rows, int columns);
 		void SpawnCells();
-		void AdjustCells();
+		void AdjustCells(float zoomFactor);
 		void SpawnBombs(int BombAmount);
 		void ResetList();
 		void Draw();

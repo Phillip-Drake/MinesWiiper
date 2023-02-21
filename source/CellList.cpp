@@ -45,7 +45,7 @@ void CellList::SpawnCells()
 	}
 }
 
-void CellList::AdjustCells()
+void CellList::AdjustCells(float zoomFactor)
 {
 	int xOffSet, yOffSet;
 	xOffSet = 320 - (rows / 2) * 20;
@@ -56,7 +56,7 @@ void CellList::AdjustCells()
 		for(int j = 0; j < columns; j++)
 		{
 			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet, j * 20 * zoomFactor +  yOffSet);
-			cells[i][j].SetZoom();
+			cells[i][j].SetZoom(zoomFactor);
 		}
 	}
 }

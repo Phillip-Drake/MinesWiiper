@@ -5,7 +5,7 @@ using namespace wsp;
 Sprite cursor;
 Image cursorImage;
 int main(int argc, char **argv) {
-	zoomFactor = 1;
+	float zoomFactor = 1;
 	//Game window initialization
 	GameWindow gwd;
 	gwd.InitVideo();
@@ -52,12 +52,12 @@ int main(int argc, char **argv) {
 			if(pressed & WPAD_BUTTON_UP)
 			{
 				zoomFactor += .01;
-				begin.AdjustCells();
+				game.AdjustCells(zoomFactor);
 			}
 			if(pressed & WPAD_BUTTON_DOWN)
 			{
 				zoomFactor -= .01;
-				begin.AdjustCells();
+				game.AdjustCells(zoomFactor);
 			}
 			if(pressed & WPAD_BUTTON_A)
 			{
