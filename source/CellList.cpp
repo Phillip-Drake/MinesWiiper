@@ -63,12 +63,23 @@ void CellList::SpawnBombs(int bombAmount)
 		}
 		cells[randRow][randCol].SetMine();
 	}
+	int currRow, currCol;
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
 			if(cells[i][j].IsMine())
 			{
+				// for(int k = -1; k < 2; k++)
+				// {
+					// for(int g = -1; g < 2; g++)
+					// {
+						// currRow = i + k;
+						// currCol = i + g;
+						// if((currRow >= 0 && currRow < rows) && (currCol >= 0 && currCol < columns))
+							// cells[currRow][currCol].IncrementNumMines();
+					// }
+				// }
 				//reformed if-then structure in order to minimize comparisons
 				if(i-1 >= 0 && j - 1 >= 0)
 				{
@@ -134,6 +145,23 @@ void CellList::SpawnBombs(int bombAmount)
 						cells[i][j+1].IncrementNumMines();
 					}
 				}	
+				else
+				{
+					if(i+1 < rows && j+1 < columns)
+					{
+						cells[i+1][j].IncrementNumMines();
+						cells[i][j+1].IncrementNumMines();
+						cells[i+1][j+1].IncrementNumMines();
+					}
+					else if(i+1 < rows)
+					{
+						cells[i+1][j].IncrementNumMines();
+					}
+					else if(j+1 < columns)
+					{
+						cells[i][j+1].IncrementNumMines();
+					}
+				}
 			}
 		}
 	}
@@ -143,39 +171,43 @@ void CellList::SpawnBombs(int bombAmount)
 	{
 		for(int j = 0; j < columns; j++)
 		{
-			switch(cells[i][j].GetNumMines())
-				{
-					case 1:
-						cells[i][j].SetClickedImage(oneCell);
-						break;
-					case 2:
-						cells[i][j].SetClickedImage(twoCell);
-						break;
-					case 3:
-						cells[i][j].SetClickedImage(threeCell);
-						break;
-					case 4:
-						cells[i][j].SetClickedImage(fourCell);
-						break;
-					case 5:
-						cells[i][j].SetClickedImage(fiveCell);
-						break;
-					case 6:
-						cells[i][j].SetClickedImage(sixCell);
-						break;
-					case 7:
-						cells[i][j].SetClickedImage(sevenCell);
-						break;
-					case 8:
-						cells[i][j].SetClickedImage(eightCell);
-						break;
-					default:
-						if(cells[i][j].IsMine())
-							cells[i][j].SetClickedImage(mineCell);
-						else
+			if(cells[i][j].IsMine())
+			{
+				cells[i][j].SetClickedImage(mineCell);
+			}
+			else
+			{
+				switch(cells[i][j].GetNumMines())
+					{
+						case 1:
+							cells[i][j].SetClickedImage(oneCell);
+							break;
+						case 2:
+							cells[i][j].SetClickedImage(twoCell);
+							break;
+						case 3:
+							cells[i][j].SetClickedImage(threeCell);
+							break;
+						case 4:
+							cells[i][j].SetClickedImage(fourCell);
+							break;
+						case 5:
+							cells[i][j].SetClickedImage(fiveCell);
+							break;
+						case 6:
+							cells[i][j].SetClickedImage(sixCell);
+							break;
+						case 7:
+							cells[i][j].SetClickedImage(sevenCell);
+							break;
+						case 8:
+							cells[i][j].SetClickedImage(eightCell);
+							break;
+						default:
 							cells[i][j].SetClickedImage(zeroCell);
-						break;
-				}
+							break;
+					}
+			}
 		}
 	}
 }
@@ -187,7 +219,8 @@ void CellList::ResetList()
 //checks if the cursor is over a cell
 void CellList::OverCell(int x, int y)
 {
-	for(int i = 0; i < rows; i++)
+	
+	for(int i = 0 ; i < rows; i++)
 	{
 		// if(lastCell[0] != -1)
 		// {
@@ -206,6 +239,7 @@ void CellList::OverCell(int x, int y)
 			}
 		}
 	}
+	
 }
 
 void CellList::ClickLastCell()
@@ -230,58 +264,12 @@ void CellList::FlagLastCell()
 }
 void CellList::RecursiveClick(int row, int col)
 {
-	if(cells[row][col].GetNumMines() == 0 && !cells[row][col].IsMine() && !cells[row][col].IsClicked())
+	if((row >= 0 && row < rows) && (col >= 0 && col < columns))
 	{
-		if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
-			cells[row][col].Click();
-		if(row == 0)
+		if(cells[row][col].GetNumMines() == 0 && !cells[row][col].IsMine() && !cells[row][col].IsClicked())
 		{
-			if(col == 0)
-			{
-				RecursiveClick(row, col+1);
-				RecursiveClick(row+1, col+1);
-				RecursiveClick(row+1, col);
-			}
-			else if(col == columns - 1)
-			{
-				RecursiveClick(row, col-1);
-				RecursiveClick(row+1, col-1);
-				RecursiveClick(row+1, col);
-			}
-			else
-			{
-				RecursiveClick(row, col+1);
-				RecursiveClick(row+1, col+1);
-				RecursiveClick(row, col-1);
-				RecursiveClick(row+1, col-1);
-				RecursiveClick(row+1, col);
-			}
-		}
-		else if(row == rows - 1)
-		{
-			if(col == 0)
-			{
-				RecursiveClick(row-1, col+1);
-				RecursiveClick(row, col+1);
-				RecursiveClick(row-1, col);
-			}
-			else if(col == columns - 1)
-			{
-				RecursiveClick(row-1, col-1);
-				RecursiveClick(row, col-1);
-				RecursiveClick(row-1, col);
-			}
-			else
-			{
-				RecursiveClick(row-1, col+1);
-				RecursiveClick(row, col+1);
-				RecursiveClick(row-1, col-1);
-				RecursiveClick(row, col-1);
-				RecursiveClick(row-1, col);
-			}
-		}
-		else
-		{
+			if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
+				cells[row][col].Click();
 			RecursiveClick(row-1, col-1);
 			RecursiveClick(row-1, col);
 			RecursiveClick(row-1, col+1);
@@ -292,8 +280,8 @@ void CellList::RecursiveClick(int row, int col)
 			RecursiveClick(row+1, col);
 			RecursiveClick(row+1, col+1);
 		}
-	}else if(!cells[row][col].IsMine()){
-		cells[row][col].Click();
+		else if(!cells[row][col].IsMine())
+			cells[row][col].Click();
 	}
 	
 }

@@ -17,12 +17,10 @@ MainScreen::MainScreen()
 	mineCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	heightCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	widthCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
-	//load start button images
-
 	//spawn counters
-	heightCounter.Spawn(256, 20, 4, 99);
-	widthCounter.Spawn(256, 100, 4, 99);
-	mineCounter.Spawn(256, 200, 0, 999);
+	heightCounter.Spawn(256, 64, 4, 26);
+	widthCounter.Spawn(256, 160, 4, 30);
+	mineCounter.Spawn(256, 256	, 0, 99);
 	//load arrow Images
 	leftArrow.LoadImage(leftArrow_png, IMG_LOAD_TYPE_BUFFER);
 	leftArrowHighlighted.LoadImage(leftArrowHighlighted_png, IMG_LOAD_TYPE_BUFFER);
@@ -36,12 +34,12 @@ MainScreen::MainScreen()
 	widthRightArrow.SetImages(rightArrow, rightArrowHighlighted);
 	heightRightArrow.SetImages(rightArrow, rightArrowHighlighted);
 	//arrow spawning
-	heightLeftArrow.Spawn(192, 20);
-	widthLeftArrow.Spawn(192, 100);
-	mineLeftArrow.Spawn(192, 200);
-	heightRightArrow.Spawn(384, 20);
-	widthRightArrow.Spawn(384, 100);
-	mineRightArrow.Spawn(384, 200);
+	heightLeftArrow.Spawn(192, 64);
+	widthLeftArrow.Spawn(192, 160);
+	mineLeftArrow.Spawn(192, 256);
+	heightRightArrow.Spawn(384, 64);
+	widthRightArrow.Spawn(384, 160);
+	mineRightArrow.Spawn(384, 256);
 	//start button image initialization
 	start.LoadImage(start_png, IMG_LOAD_TYPE_BUFFER);
 	startHighlighted.LoadImage(startHighlighted_png, IMG_LOAD_TYPE_BUFFER);
@@ -49,6 +47,17 @@ MainScreen::MainScreen()
 	startButton.SetImages(start, startHighlighted);
 	//start button spawning
 	startButton.Spawn(192, 300);
+	//load label images
+	widthImage.LoadImage(widthLabel_png, IMG_LOAD_TYPE_BUFFER);
+	heightImage.LoadImage(heightLabel_png, IMG_LOAD_TYPE_BUFFER);
+	minesImage.LoadImage(minesLabel_png, IMG_LOAD_TYPE_BUFFER);
+	//label sprite initialization
+	widthSprite.SetImage(&widthImage);
+	heightSprite.SetImage(&heightImage);
+	minesSprite.SetImage(&minesImage);
+	heightSprite.SetPosition(256, 32);
+	widthSprite.SetPosition(256, 128);
+	minesSprite.SetPosition(256, 224);
 }
 
 int MainScreen::GetHeight()
@@ -107,4 +116,8 @@ void MainScreen::Draw()
 	mineRightArrow.Draw();
 	//start button drawing
 	startButton.Draw();
+	//label drawing
+	heightSprite.Draw();
+	widthSprite.Draw();
+	minesSprite.Draw();
 }

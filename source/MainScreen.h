@@ -16,6 +16,15 @@
 #include "rightArrowHighlighted_png.h"
 #include "start_png.h"
 #include "startHighlighted_png.h"
+// #include "height-_png.h"
+// #include "height+_png.h"
+// #include "width-_png.h"
+// #include "width+_png.h"
+// #include "mines-_png.h"
+// #include "mines+_png.h"
+#include "heightLabel_png.h"
+#include "widthLabel_png.h"
+#include "minesLabel_png.h"
 //Main Homescreen
 class MainScreen {
 	public : 
@@ -33,4 +42,6 @@ class MainScreen {
 		Image zero, one, two, three, four, five, six, seven, eight, nine;
 		Image leftArrow, leftArrowHighlighted, rightArrow, rightArrowHighlighted;
 		Image start, startHighlighted;
+		Image widthImage, heightImage, minesImage;
+		Sprite widthSprite, heightSprite, minesSprite;
 };
