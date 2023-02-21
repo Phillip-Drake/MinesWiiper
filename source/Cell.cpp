@@ -53,6 +53,15 @@ void Cell::Flag()
 void Cell::SetMine(){
 	isMine = true;
 }
+
+void Cell::SetZoom()
+{
+	unclickedSprite.SetZoom(zoomFactor);
+	highlightedSprite.SetZoom(zoomFactor);
+	clickedSprite.SetZoom(zoomFactor);
+	flaggedSprite.SetZoom(zoomFactor);
+	
+}
 //increases the amount of mines next to the cell by one
 //my program iteratively increases the amount of mines next to the cell through many checks, so the value cannot be directly assigned
 void Cell::IncrementNumMines()

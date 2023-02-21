@@ -4,8 +4,8 @@
 using namespace wsp;
 Sprite cursor;
 Image cursorImage;
-int main(int argc, char **argv) { 
-	
+int main(int argc, char **argv) {
+	zoomFactor = 1;
 	//Game window initialization
 	GameWindow gwd;
 	gwd.InitVideo();
@@ -22,20 +22,20 @@ int main(int argc, char **argv) {
 	cursorImage.LoadImage(cursor_png, IMG_LOAD_TYPE_BUFFER);
 	cursor.SetImage(&cursorImage);
 	//booleans for a-press protection, these will be used to disallow for the user to hold down the a button and press many cells
-	bool justPressed = false, firstPress = true;	
+	bool justPressed = false, firstPress = true;
 	//game state stuff
-	bool gameRunning = false, splashScreen = true, gameStart = true;	
-	while(1) { 
+	bool gameRunning = false, splashScreen = true, gameStart = true;
+	while(1) {
 		//checks for any wii-motes
 		WPAD_ScanPads();
 		//value for button being pressed
 		u32 pressed = WPAD_ButtonsHeld(WPAD_CHAN_0);
-		//if the home button is pressed, 
+		//if the home button is pressed,
 		if(WPAD_ButtonsDown(WPAD_CHAN_0)&WPAD_BUTTON_HOME)
 			break;
-		
-		
-		
+
+
+
 		ir_t ir;
 		WPAD_IR(WPAD_CHAN_0, &ir);
 		cursor.SetPosition(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
@@ -48,6 +48,16 @@ int main(int argc, char **argv) {
 				game.SetSize(begin.GetWidth(), begin.GetHeight());
 				game.SpawnCells();
 				gameStart = false;
+			}
+			if(pressed & WPAD_BUTTON_UP)
+			{
+				zoomFactor += .01;
+				begin.AdjustCells();
+			}
+			if(pressed & WPAD_BUTTON_DOWN)
+			{
+				zoomFactor -= .01;
+				begin.AdjustCells();
 			}
 			if(pressed & WPAD_BUTTON_A)
 			{
@@ -95,6 +105,6 @@ int main(int argc, char **argv) {
 		cursor.Draw();
 		gwd.Flush();
 	}
-	
-	
+
+
 }

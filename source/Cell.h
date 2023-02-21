@@ -18,6 +18,7 @@ using namespace wsp;
 
 class Cell {
 	public : 
+		static float zoomFactor;
 	//default constructor, constructor with basic parameters
 		Cell();
 		Cell(int x, int y);
@@ -29,6 +30,7 @@ class Cell {
 		void SetClickedImage(Image &clickedImage);
 	//Draws the cell
 		void SetMine();
+		void SetZoom();
 		void Draw();
 		void IncrementNumMines();
 		void Click();

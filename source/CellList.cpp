@@ -44,6 +44,22 @@ void CellList::SpawnCells()
 		}
 	}
 }
+
+void CellList::AdjustCells()
+{
+	int xOffSet, yOffSet;
+	xOffSet = 320 - (rows / 2) * 20;
+	yOffSet = 240 - (columns / 2) * 20;
+	//creates cells at the required x and y values
+	for(int i = 0; i < rows; i++)
+	{
+		for(int j = 0; j < columns; j++)
+		{
+			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet, j * 20 * zoomFactor +  yOffSet);
+			cells[i][j].SetZoom();
+		}
+	}
+}
 //spawns the bombs onto the list
 void CellList::SpawnBombs(int bombAmount)
 {
