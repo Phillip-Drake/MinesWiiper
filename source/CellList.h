@@ -4,8 +4,9 @@ class CellList{
 
 	public :
 		CellList();
-		CellList(int rows, int columns); 
 		~CellList();
+		//sets the size of the cellList
+		void SetSize(int rows, int columns);
 		void SpawnCells();
 		void SpawnBombs(int BombAmount);
 		void ResetList();

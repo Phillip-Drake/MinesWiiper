@@ -1,8 +1,24 @@
 #include "CellList.h"
-CellList::CellList(){
-//TODO : Implement Default constructor
+CellList::CellList()
+{
+	unClickedCell.LoadImage(emptyCell_png, IMG_LOAD_TYPE_BUFFER);
+	highlightedCell.LoadImage(highlightedCell_png, IMG_LOAD_TYPE_BUFFER);
+	mineCell.LoadImage(mine_png, IMG_LOAD_TYPE_BUFFER);
+	flaggedCell.LoadImage(flagCell_png, IMG_LOAD_TYPE_BUFFER);
+	zeroCell.LoadImage(zeroCell_png, IMG_LOAD_TYPE_BUFFER);
+	oneCell.LoadImage(oneCell_png, IMG_LOAD_TYPE_BUFFER);
+	twoCell.LoadImage(twoCell_png, IMG_LOAD_TYPE_BUFFER);
+	threeCell.LoadImage(threeCell_png, IMG_LOAD_TYPE_BUFFER);
+	fourCell.LoadImage(fourCell_png, IMG_LOAD_TYPE_BUFFER);
+	fiveCell.LoadImage(fiveCell_png, IMG_LOAD_TYPE_BUFFER);
+	sixCell.LoadImage(sixCell_png, IMG_LOAD_TYPE_BUFFER);
+	sevenCell.LoadImage(sevenCell_png, IMG_LOAD_TYPE_BUFFER);
+	eightCell.LoadImage(eightCell_png, IMG_LOAD_TYPE_BUFFER);
 }
-CellList::CellList(int rows, int columns)
+//destructor
+CellList::~CellList() { }
+
+void CellList::SetSize(int rows, int columns)
 {
 	//sets amount of rows and columns
 	this->rows = rows;
@@ -11,23 +27,7 @@ CellList::CellList(int rows, int columns)
 	cells = new Cell*[rows];
 	for(int i = 0; i < rows; i++)
 			cells[i] = new Cell[columns];
-	//loads allll the images we need
-	unClickedCell.LoadImage(emptyCell_png, IMG_LOAD_TYPE_BUFFER);
-	highlightedCell.LoadImage(highlightedCell_png, IMG_LOAD_TYPE_BUFFER);
-	mineCell.LoadImage(mine_png, IMG_LOAD_TYPE_BUFFER);
-	flaggedCell.LoadImage(flagCell_png, IMG_LOAD_TYPE_BUFFER);
-	zeroCell.LoadImage(zero_png, IMG_LOAD_TYPE_BUFFER);
-	oneCell.LoadImage(one_png, IMG_LOAD_TYPE_BUFFER);
-	twoCell.LoadImage(two_png, IMG_LOAD_TYPE_BUFFER);
-	threeCell.LoadImage(three_png, IMG_LOAD_TYPE_BUFFER);
-	fourCell.LoadImage(four_png, IMG_LOAD_TYPE_BUFFER);
-	fiveCell.LoadImage(five_png, IMG_LOAD_TYPE_BUFFER);
-	sixCell.LoadImage(six_png, IMG_LOAD_TYPE_BUFFER);
-	sevenCell.LoadImage(seven_png, IMG_LOAD_TYPE_BUFFER);
-	eightCell.LoadImage(eight_png, IMG_LOAD_TYPE_BUFFER);
 }
-//destructor
-CellList::~CellList() { }
 //spawns each cell
 void CellList::SpawnCells()
 {
@@ -56,7 +56,7 @@ void CellList::SpawnBombs(int bombAmount)
 		randRow = std::rand() % rows;
 		randCol = std::rand() % columns;
 		//requires that the bombs not be placed on / next to the cell which the cursor clicked
-		while((randRow >= lastCell[0] - 1 && randRow <= lastCell[0] + 1) || (randCol >= lastCell[1] - 1 && randCol <= lastCell[1] + 1))
+		while((randRow >= lastCell[0] - 1 && randRow <= lastCell[0] + 1) && (randCol >= lastCell[1] - 1 && randCol <= lastCell[1] + 1))
 		{
 			randRow = std::rand() % rows;
 			randCol = std::rand() % columns;

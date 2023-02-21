@@ -1,6 +1,6 @@
 #include <wiiuse/wpad.h>
 #include "CellList.h"
-
+#include "MainScreen.h"
 using namespace wsp;
 Sprite cursor;
 Image cursorImage;
@@ -9,21 +9,28 @@ int main(int argc, char **argv) {
 	//Game window initialization
 	GameWindow gwd;
 	gwd.InitVideo();
-	bool justPressed = false, firstPress = true;
 	gwd.SetBackground((GXColor) {211, 211, 211, 255});
-	
+	//WiiPad initiation, allows for user input
 	WPAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	
-	CellList test = CellList(24, 20);
-	test.SpawnCells();
+	//MainScreen intiialization
+	MainScreen begin = MainScreen();
+	//Game initialization
+	CellList game = CellList();
+	game.SpawnCells();
+	//initialization for cursor sprite
 	cursorImage.LoadImage(cursor_png, IMG_LOAD_TYPE_BUFFER);
 	cursor.SetImage(&cursorImage);
+	//booleans for a-press protection, these will be used to disallow for the user to hold down the a button and press many cells
+	bool justPressed = false, firstPress = true;	
+	//game state stuff
+	bool gameRunning = false, splashScreen = true, gameStart = true;	
 	while(1) { 
-	
+		//checks for any wii-motes
 		WPAD_ScanPads();
+		//value for button being pressed
 		u32 pressed = WPAD_ButtonsHeld(WPAD_CHAN_0);
-		
+		//if the home button is pressed, 
 		if(WPAD_ButtonsDown(WPAD_CHAN_0)&WPAD_BUTTON_HOME)
 			break;
 		
@@ -34,36 +41,52 @@ int main(int argc, char **argv) {
 		cursor.SetPosition(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
 		cursor.Move(-((f32)cursor.GetWidth()/2), -((f32)cursor.GetHeight()/2));
 		cursor.SetRotation(ir.angle/2);
-		
-		if(pressed & WPAD_BUTTON_A)
+		if(gameRunning)
 		{
-			if(!justPressed)
+			if(gameStart)
 			{
-				if(firstPress)
+				game.SetSize(begin.GetWidth(), begin.GetHeight());
+				game.SpawnCells();
+				gameStart = false;
+			}
+			if(pressed & WPAD_BUTTON_A)
+			{
+				if(!justPressed)
 				{
-					test.SpawnBombs(50);
-					firstPress = false;
+					if(firstPress)
+					{
+						game.SpawnBombs(begin.GetMines());
+						firstPress = false;
+					}
+					game.ClickLastCell();
+					justPressed = true;
 				}
-				test.ClickLastCell();
-				justPressed = true;
 			}
-		}
-		else if(pressed && WPAD_BUTTON_B)
-		{
-			if(!justPressed)
+			else if(pressed && WPAD_BUTTON_B)
 			{
-				test.FlagLastCell();
+				if(!justPressed)
+				{
+					game.FlagLastCell();
+					justPressed = true;
+				}
+			}
+			else
+			{
+				justPressed = false;
+			}
+			game.OverCell(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
+			game.Draw();
+		}
+		else if(splashScreen)
+		{
+			if(pressed & WPAD_BUTTON_A)
+			{
+				if(begin.Click())
+					gameRunning = true;
 				justPressed = true;
 			}
+			begin.Update(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
 		}
-		else
-		{
-			justPressed = false;
-		}
-		test.OverCell(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
-		
-		
-		test.Draw();
 		cursor.Draw();
 		gwd.Flush();
 	}
