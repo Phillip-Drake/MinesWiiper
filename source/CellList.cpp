@@ -70,96 +70,15 @@ void CellList::SpawnBombs(int bombAmount)
 		{
 			if(cells[i][j].IsMine())
 			{
-				// for(int k = -1; k < 2; k++)
-				// {
-					// for(int g = -1; g < 2; g++)
-					// {
-						// currRow = i + k;
-						// currCol = i + g;
-						// if((currRow >= 0 && currRow < rows) && (currCol >= 0 && currCol < columns))
-							// cells[currRow][currCol].IncrementNumMines();
-					// }
-				// }
-				//reformed if-then structure in order to minimize comparisons
-				if(i-1 >= 0 && j - 1 >= 0)
+				//re-reformed numbering system
+				for(int k = -1; k < 2; k++)
 				{
-					cells[i-1][j].IncrementNumMines();
-					cells[i][j-1].IncrementNumMines();
-					cells[i-1][j-1].IncrementNumMines();
-					if(i+1 < rows && j+1 < columns)
+					for(int g = -1; g < 2; g++)
 					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i+1][j-1].IncrementNumMines();
-						cells[i][j+1].IncrementNumMines();
-						cells[i-1][j+1].IncrementNumMines();
-						cells[i+1][j+1].IncrementNumMines();
-					}
-					else if(i+1 < rows)
-					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i+1][j-1].IncrementNumMines();
-					}
-					else if(j+1 < columns)
-					{
-						cells[i][j+1].IncrementNumMines();
-						cells[i-1][j+1].IncrementNumMines();
-					}
-				}
-				else if(i-1 >= 0)
-				{
-					cells[i-1][j].IncrementNumMines();
-					if(i+1 < rows && j+1 < columns)
-					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i][j+1].IncrementNumMines();
-						cells[i-1][j+1].IncrementNumMines();
-						cells[i+1][j+1].IncrementNumMines();
-					}
-					else if(i+1 < rows)
-					{
-						cells[i+1][j].IncrementNumMines();
-					}
-					else if(j+1 < columns)
-					{
-						cells[i][j+1].IncrementNumMines();
-						cells[i-1][j+1].IncrementNumMines();
-					}
-				}
-				else if(j-1 >= 0)
-				{
-					cells[i][j-1].IncrementNumMines();
-					if(i+1 < rows && j+1 < columns)
-					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i+1][j-1].IncrementNumMines();
-						cells[i][j+1].IncrementNumMines();
-						cells[i+1][j+1].IncrementNumMines();
-					}
-					else if(i+1 < rows)
-					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i+1][j-1].IncrementNumMines();
-					}
-					else if(j+1 < columns)
-					{
-						cells[i][j+1].IncrementNumMines();
-					}
-				}	
-				else
-				{
-					if(i+1 < rows && j+1 < columns)
-					{
-						cells[i+1][j].IncrementNumMines();
-						cells[i][j+1].IncrementNumMines();
-						cells[i+1][j+1].IncrementNumMines();
-					}
-					else if(i+1 < rows)
-					{
-						cells[i+1][j].IncrementNumMines();
-					}
-					else if(j+1 < columns)
-					{
-						cells[i][j+1].IncrementNumMines();
+						currRow = i + k;
+						currCol = j + g;
+						if((currRow >= 0 && currRow < rows) && (currCol >= 0 && currCol < columns))
+							cells[currRow][currCol].IncrementNumMines();
 					}
 				}
 			}
