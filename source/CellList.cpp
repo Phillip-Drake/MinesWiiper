@@ -51,6 +51,13 @@ void CellList::SpawnCells()
 	}
 }
 
+float CellList::GetInitialZoom()
+{
+	if(columns * 20.0 <= 480.0)
+		return 1;
+	else
+		return 480.0 / (columns * 20.0);
+}
 void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 {
 	int xOffSet, yOffSet;
@@ -169,11 +176,6 @@ void CellList::OverCell(int x, int y)
 	
 	for(int i = 0 ; i < rows; i++)
 	{
-		// if(lastCell[0] != -1)
-		// {
-			// cells[lastCell[0]][lastCell[1]].UnOver();
-			// lastCell[0] = -1;
-		// }
 		for(int j = 0; j < columns; j++)
 		{
 			
@@ -211,30 +213,50 @@ void CellList::FlagLastCell()
 }
 void CellList::RecursiveClick(int row, int col)
 {
-	if((row >= 0 && row < rows) && (col >= 0 && col < columns))
+	int currRow, currCol;
+	cells[row][col].Click();
+	if(cells[row][col].GetNumMines() == 0)
 	{
-		if(cells[row][col].GetNumMines() == 0 && !cells[row][col].IsMine() && !cells[row][col].IsClicked())
+		for(int i = -1; i < 2; i++)
 		{
-			if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
-				cells[row][col].Click();
-			RecursiveClick(row-1, col-1);
-			RecursiveClick(row-1, col);
-			RecursiveClick(row-1, col+1);
-			RecursiveClick(row, col-1);
-			RecursiveClick(row, col);
-			RecursiveClick(row, col+1);
-			RecursiveClick(row+1, col-1);
-			RecursiveClick(row+1, col);
-			RecursiveClick(row+1, col+1);
+			for(int j = -1; j < 2; j++)
+			{
+				currRow = row + i;
+				currCol = col + j;
+				if((currRow >=0 && currRow < rows) && (currCol >= 0 && currCol < columns))
+				{
+					if(!cells[currRow][currCol].IsClicked() && !cells[currRow][currCol].IsFlagged())
+					{
+						RecursiveClick(currRow, currCol);
+					}
+				}				
+			}
 		}
-		else if(!cells[row][col].IsMine())
-			cells[row][col].Click();
 	}
+	// if((row >= 0 && row < rows) && (col >= 0 && col < columns))
+	// {
+		// if(cells[row][col].GetNumMines() == 0 && !cells[row][col].IsMine() && !cells[row][col].IsClicked())
+		// {
+			// if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
+				// cells[row][col].Click();
+			// RecursiveClick(row-1, col-1);
+			// RecursiveClick(row-1, col);
+			// RecursiveClick(row-1, col+1);
+			// RecursiveClick(row, col-1);
+			// RecursiveClick(row, col);
+			// RecursiveClick(row, col+1);
+			// RecursiveClick(row+1, col-1);
+			// RecursiveClick(row+1, col);
+			// RecursiveClick(row+1, col+1);
+		// }
+		// else if(!cells[row][col].IsMine())
+			// cells[row][col].Click();
+	// }
 	
 }
 void CellList::Draw()
 {
-	for(int i = 0; i < rows; i++)
+	for(int i; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{

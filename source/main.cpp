@@ -49,6 +49,8 @@ int main(int argc, char **argv) {
 				game.SetSize(begin.GetWidth(), begin.GetHeight());
 				game.SpawnCells();
 				gameStart = false;
+				zoomFactor = game.GetInitialZoom();
+				game.AdjustCells(zoomFactor, xPan, yPan);
 			}
 			if(pressed & WPAD_BUTTON_UP)
 			{
@@ -86,7 +88,7 @@ int main(int argc, char **argv) {
 				{
 					if(firstPress)
 					{
-						game.SpawnBombs(begin.GetMines());
+						game.SpawnBombs(980);
 						firstPress = false;
 					}
 					game.ClickLastCell();
