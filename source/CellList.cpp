@@ -32,8 +32,14 @@ void CellList::SetSize(int rows, int columns)
 void CellList::SpawnCells()
 {
 	int xOffSet, yOffSet;
-	xOffSet = 320 - (rows / 2) * 20;
-	yOffSet = 240 - (columns / 2) * 20;
+	if(rows % 2 == 1)
+		xOffSet = 320 - (rows / 2) * 20;
+	else
+		xOffSet = (int)(320.0 - (rows / 2.0) * 20.0);
+	if(columns % 2 == 1)
+		yOffSet = 226 - (columns / 2) * 20;
+	else
+		yOffSet = (int)(260.0 - (columns / 2.0) * 20.0);
 	//creates cells at the required x and y values
 	for(int i = 0; i < rows; i++)
 	{
@@ -45,17 +51,23 @@ void CellList::SpawnCells()
 	}
 }
 
-void CellList::AdjustCells(float zoomFactor)
+void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 {
 	int xOffSet, yOffSet;
-	xOffSet = 320 - (rows / 2) * 20;
-	yOffSet = 240 - (columns / 2) * 20;
+	if(rows % 2 == 1)
+		xOffSet = 320 - (rows / 2) * 20 * zoomFactor;
+	else
+		xOffSet = (int)(320.0 - (rows / 2.0) * 20.0 * zoomFactor);
+	if(columns % 2 == 1)
+		yOffSet = 226 - (columns / 2) * 20 * zoomFactor;
+	else
+		yOffSet = (int)(260.0 - (columns / 2.0) * 20.0 * zoomFactor);
 	//creates cells at the required x and y values
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
-			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet, j * 20 * zoomFactor +  yOffSet);
+			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet + xPan, j * 20 * zoomFactor +  yOffSet + yPan);
 			cells[i][j].SetZoom(zoomFactor);
 		}
 	}

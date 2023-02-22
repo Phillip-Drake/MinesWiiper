@@ -18,8 +18,8 @@ MainScreen::MainScreen()
 	heightCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	widthCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	//spawn counters
-	heightCounter.Spawn(256, 64, 4, 26);
-	widthCounter.Spawn(256, 160, 4, 30);
+	heightCounter.Spawn(256, 64, 4, 99);
+	widthCounter.Spawn(256, 160, 4, 99);
 	mineCounter.Spawn(256, 256	, 0, 99);
 	//load arrow Images
 	leftArrow.LoadImage(leftArrow_png, IMG_LOAD_TYPE_BUFFER);

@@ -6,6 +6,7 @@ Sprite cursor;
 Image cursorImage;
 int main(int argc, char **argv) {
 	float zoomFactor = 1;
+	int xPan = 0, yPan = 0;
 	//Game window initialization
 	GameWindow gwd;
 	gwd.InitVideo();
@@ -51,13 +52,33 @@ int main(int argc, char **argv) {
 			}
 			if(pressed & WPAD_BUTTON_UP)
 			{
-				zoomFactor += .01;
-				game.AdjustCells(zoomFactor);
+				yPan -= 1;
+				game.AdjustCells(zoomFactor, xPan, yPan);
 			}
 			if(pressed & WPAD_BUTTON_DOWN)
 			{
+				yPan += 1;
+				game.AdjustCells(zoomFactor, xPan, yPan);
+			}
+			if(pressed & WPAD_BUTTON_LEFT)
+			{
+				xPan -= 1;
+				game.AdjustCells(zoomFactor, xPan, yPan);
+			}
+			if(pressed & WPAD_BUTTON_RIGHT)
+			{
+				xPan += 1;
+				game.AdjustCells(zoomFactor, xPan, yPan);
+			}
+			if(pressed & WPAD_BUTTON_PLUS)
+			{
+				zoomFactor += .01;
+				game.AdjustCells(zoomFactor, xPan, yPan);
+			}
+			if(pressed & WPAD_BUTTON_MINUS)
+			{
 				zoomFactor -= .01;
-				game.AdjustCells(zoomFactor);
+				game.AdjustCells(zoomFactor, xPan, yPan);
 			}
 			if(pressed & WPAD_BUTTON_A)
 			{
@@ -72,7 +93,7 @@ int main(int argc, char **argv) {
 					justPressed = true;
 				}
 			}
-			else if(pressed && WPAD_BUTTON_B)
+			else if(pressed & WPAD_BUTTON_B)
 			{
 				if(!justPressed)
 				{
