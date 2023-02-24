@@ -75,8 +75,41 @@ void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 		for(int j = 0; j < columns; j++)
 		{
 			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet + xPan, j * 20 * zoomFactor +  yOffSet + yPan);
+			//cells[i][j].Spawn(600, j * 20 * zoomFactor + yOffSet + yPan);
 			cells[i][j].SetZoom(zoomFactor);
 		}
+	}
+	//sets minimum rows seen on screen
+	if(cells[0][0].GetX() < -20)
+	{
+		minRow = (0 - cells[0][0].GetX()) / (20 * zoomFactor);
+	}
+	else
+	{
+		minRow = 0;
+	}
+	//sets maximum rows seen on screen
+	if(cells[rows][columns].GetX() > 640)
+	{
+		maxRow = ((640 - cells[0][0].GetX()) / (20 * zoomFactor)) + 2;
+		 if(maxRow > rows)
+			 maxRow = rows;
+	}
+	//sets minimim and maximum columns seen on screen
+	if(cells[0][0].GetY() < -40)
+	{
+		minCol = (-40 - cells[0][0].GetY()) / (20 * zoomFactor);
+	}
+	else
+	{
+		minCol = 0;
+	}
+	//sets maximum columns seen on screen
+	if(cells[rows][columns].GetY() > 500)
+	{
+		maxCol = ((500 - cells[0][0].GetY()) / (20 * zoomFactor)) + 2;
+		 if(maxCol > columns)
+			 maxCol = columns;
 	}
 }
 //spawns the bombs onto the list
@@ -174,9 +207,9 @@ void CellList::ResetList()
 void CellList::OverCell(int x, int y)
 {
 	
-	for(int i = 0 ; i < rows; i++)
+	for(int i = minRow ; i < maxRow; i++)
 	{
-		for(int j = 0; j < columns; j++)
+		for(int j = minCol; j < maxCol; j++)
 		{
 			
 			if((cells[i][j].GetX() <= x && cells[i][j].GetX()+40 >= x) && (cells[i][j].GetY() <= y && cells[i][j].GetY()+40 >= y))
@@ -190,7 +223,7 @@ void CellList::OverCell(int x, int y)
 	}
 	
 }
-
+//clicks the last cell that the mouse was over
 void CellList::ClickLastCell()
 {
 	//recursive clicking for all nearby cells if there are no nearby mines
@@ -233,32 +266,12 @@ void CellList::RecursiveClick(int row, int col)
 			}
 		}
 	}
-	// if((row >= 0 && row < rows) && (col >= 0 && col < columns))
-	// {
-		// if(cells[row][col].GetNumMines() == 0 && !cells[row][col].IsMine() && !cells[row][col].IsClicked())
-		// {
-			// if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
-				// cells[row][col].Click();
-			// RecursiveClick(row-1, col-1);
-			// RecursiveClick(row-1, col);
-			// RecursiveClick(row-1, col+1);
-			// RecursiveClick(row, col-1);
-			// RecursiveClick(row, col);
-			// RecursiveClick(row, col+1);
-			// RecursiveClick(row+1, col-1);
-			// RecursiveClick(row+1, col);
-			// RecursiveClick(row+1, col+1);
-		// }
-		// else if(!cells[row][col].IsMine())
-			// cells[row][col].Click();
-	// }
-	
 }
 void CellList::Draw()
 {
-	for(int i; i < rows; i++)
+	for(int i = minRow; i < maxRow; i++)
 	{
-		for(int j = 0; j < columns; j++)
+		for(int j = minCol; j < maxCol; j++)
 		{
 			cells[i][j].Draw();
 		}

@@ -19,7 +19,7 @@ class CellList{
 		void RecursiveClick(int row, int col);
 	private :
 		Cell** cells;	
-		int rows, columns;
+		int rows, columns, minRow, minCol, maxRow, maxCol;
 		int lastCell[2];
 		Image unClickedCell, highlightedCell, mineCell, flaggedCell, zeroCell, oneCell, twoCell, threeCell, fourCell, fiveCell, sixCell, sevenCell, eightCell;
 };
