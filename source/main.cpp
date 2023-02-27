@@ -88,7 +88,8 @@ int main(int argc, char **argv) {
 				{
 					if(firstPress)
 					{
-						game.SpawnBombs(980);
+						//((begin.GetWidth() * begin.GetHeight()) / 10) * begin.GetMines()
+						game.SpawnBombs(5);
 						firstPress = false;
 					}
 					game.ClickLastCell();

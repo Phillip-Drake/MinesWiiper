@@ -14,6 +14,7 @@ CellList::CellList()
 	sixCell.LoadImage(sixCell_png, IMG_LOAD_TYPE_BUFFER);
 	sevenCell.LoadImage(sevenCell_png, IMG_LOAD_TYPE_BUFFER);
 	eightCell.LoadImage(eightCell_png, IMG_LOAD_TYPE_BUFFER);
+	
 }
 //destructor
 CellList::~CellList() { }
@@ -23,10 +24,15 @@ void CellList::SetSize(int rows, int columns)
 	//sets amount of rows and columns
 	this->rows = rows;
 	this->columns = columns;
+	minRow = 0;
+	minCol = 0;
+	maxRow = rows;
+	maxCol = columns;
 	//initializes 2d array
 	cells = new Cell*[rows];
 	for(int i = 0; i < rows; i++)
 			cells[i] = new Cell[columns];
+	
 }
 //spawns each cell
 void CellList::SpawnCells()
@@ -89,7 +95,7 @@ void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 		minRow = 0;
 	}
 	//sets maximum rows seen on screen
-	if(cells[rows][columns].GetX() > 640)
+	if(cells[rows - 1][columns - 1].GetX() > 640)
 	{
 		maxRow = ((640 - cells[0][0].GetX()) / (20 * zoomFactor)) + 2;
 		 if(maxRow > rows)
@@ -105,7 +111,7 @@ void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 		minCol = 0;
 	}
 	//sets maximum columns seen on screen
-	if(cells[rows][columns].GetY() > 500)
+	if(cells[rows - 1][columns - 1].GetY() > 500)
 	{
 		maxCol = ((500 - cells[0][0].GetY()) / (20 * zoomFactor)) + 2;
 		 if(maxCol > columns)
@@ -269,9 +275,9 @@ void CellList::RecursiveClick(int row, int col)
 }
 void CellList::Draw()
 {
-	for(int i = minRow; i < maxRow; i++)
+	for(int i = 0; i < rows; i++)
 	{
-		for(int j = minCol; j < maxCol; j++)
+		for(int j = 0; j < columns; j++)
 		{
 			cells[i][j].Draw();
 		}

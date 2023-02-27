@@ -2,6 +2,7 @@
 
 MainScreen::MainScreen()
 {
+	mineAmount = 0;
 	//counter image initialization
 	zero.LoadImage(zero_png, IMG_LOAD_TYPE_BUFFER);
 	one.LoadImage(one_png, IMG_LOAD_TYPE_BUFFER);
@@ -14,39 +15,48 @@ MainScreen::MainScreen()
 	eight.LoadImage(eight_png, IMG_LOAD_TYPE_BUFFER);
 	nine.LoadImage(nine_png, IMG_LOAD_TYPE_BUFFER);
 	//set counter images
-	mineCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	heightCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	widthCounter.SetImages(zero, one, two, three, four, five, six, seven, eight, nine);
 	//spawn counters
 	heightCounter.Spawn(256, 64, 4, 99);
 	widthCounter.Spawn(256, 160, 4, 99);
-	mineCounter.Spawn(256, 256	, 0, 99);
 	//load arrow Images
 	leftArrow.LoadImage(leftArrow_png, IMG_LOAD_TYPE_BUFFER);
 	leftArrowHighlighted.LoadImage(leftArrowHighlighted_png, IMG_LOAD_TYPE_BUFFER);
 	rightArrow.LoadImage(rightArrow_png, IMG_LOAD_TYPE_BUFFER);
 	rightArrowHighlighted.LoadImage(rightArrowHighlighted_png, IMG_LOAD_TYPE_BUFFER);
 	//arrow image initialization
-	mineLeftArrow.SetImages(leftArrow, leftArrowHighlighted);
 	widthLeftArrow.SetImages(leftArrow, leftArrowHighlighted);
 	heightLeftArrow.SetImages(leftArrow, leftArrowHighlighted);
-	mineRightArrow.SetImages(rightArrow, rightArrowHighlighted);
 	widthRightArrow.SetImages(rightArrow, rightArrowHighlighted);
 	heightRightArrow.SetImages(rightArrow, rightArrowHighlighted);
 	//arrow spawning
 	heightLeftArrow.Spawn(192, 64);
 	widthLeftArrow.Spawn(192, 160);
-	mineLeftArrow.Spawn(192, 256);
 	heightRightArrow.Spawn(384, 64);
 	widthRightArrow.Spawn(384, 160);
-	mineRightArrow.Spawn(384, 256);
+	//mine button image initialization
+	mineAmountOne.LoadImage(mineAmountOne_png, IMG_LOAD_TYPE_BUFFER);
+	mineAmountOneHighlighted.LoadImage(mineAmountOneHighlighted_png, IMG_LOAD_TYPE_BUFFER);
+	mineAmountTwo.LoadImage(mineAmountTwo_png, IMG_LOAD_TYPE_BUFFER);
+	mineAmountTwoHighlighted.LoadImage(mineAmountTwoHighlighted_png, IMG_LOAD_TYPE_BUFFER);
+	mineAmountThree.LoadImage(mineAmountThree_png, IMG_LOAD_TYPE_BUFFER);
+	mineAmountThreeHighlighted.LoadImage(mineAmountThreeHighlighted_png, IMG_LOAD_TYPE_BUFFER);
+	//mine button initialization
+	mineNormal.SetImages(mineAmountOne, mineAmountOneHighlighted);
+	mineALot.SetImages(mineAmountTwo, mineAmountTwoHighlighted);
+	mineTooMany.SetImages(mineAmountThree, mineAmountThreeHighlighted);
+	//mine button spawning
+	mineNormal.Spawn(96, 272);
+	mineALot.Spawn(256, 272);
+	mineTooMany.Spawn(416, 272);
 	//start button image initialization
 	start.LoadImage(start_png, IMG_LOAD_TYPE_BUFFER);
 	startHighlighted.LoadImage(startHighlighted_png, IMG_LOAD_TYPE_BUFFER);
 	//load start button images
 	startButton.SetImages(start, startHighlighted);
 	//start button spawning
-	startButton.Spawn(256, 352);
+	startButton.Spawn(256, 368);
 	//load label images
 	widthImage.LoadImage(widthLabel_png, IMG_LOAD_TYPE_BUFFER);
 	heightImage.LoadImage(heightLabel_png, IMG_LOAD_TYPE_BUFFER);
@@ -70,7 +80,7 @@ int MainScreen::GetWidth()
 }
 int MainScreen::GetMines()
 {
-	return mineCounter.GetAmount();
+	return mineAmount;
 }
 bool MainScreen::Click()
 {
@@ -78,16 +88,19 @@ bool MainScreen::Click()
 		heightCounter.DecrementAmount();
 	else if(widthLeftArrow.Click())
 		widthCounter.DecrementAmount();
-	else if(mineLeftArrow.Click())
-		mineCounter.DecrementAmount();
 	else if(heightRightArrow.Click())
 		heightCounter.IncrementAmount();
 	else if(widthRightArrow.Click())
 		widthCounter.IncrementAmount();
-	else if(mineRightArrow.Click())
-		mineCounter.IncrementAmount();
+	else if(mineNormal.Click())
+		mineAmount = 1;
+	else if(mineALot.Click())
+		mineAmount = 2;
+	else if(mineTooMany.Click())
+		mineAmount = 8;
 	else if(startButton.Click())
 		return true;
+	
 	return false;
 }
 void MainScreen::Update(int x, int y)
@@ -99,6 +112,9 @@ void MainScreen::Update(int x, int y)
 	widthRightArrow.IsOver(x, y);
 	mineRightArrow.IsOver(x, y);
 	startButton.IsOver(x, y);
+	mineNormal.IsOver(x, y);
+	mineALot.IsOver(x, y);
+	mineTooMany.IsOver(x, y);
 	Draw();
 }
 void MainScreen::Draw()
@@ -114,6 +130,10 @@ void MainScreen::Draw()
 	heightRightArrow.Draw();
 	widthRightArrow.Draw();
 	mineRightArrow.Draw();
+	//mine button drawing
+	mineNormal.Draw();
+	mineALot.Draw();
+	mineTooMany.Draw();
 	//start button drawing
 	startButton.Draw();
 	//label drawing
