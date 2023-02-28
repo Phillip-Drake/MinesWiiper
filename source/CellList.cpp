@@ -275,9 +275,9 @@ void CellList::RecursiveClick(int row, int col)
 }
 void CellList::Draw()
 {
-	for(int i = 0; i < rows; i++)
+	for(int i = minRow; i < maxRow; i++)
 	{
-		for(int j = 0; j < columns; j++)
+		for(int j = minCol; j < maxCol; j++)
 		{
 			cells[i][j].Draw();
 		}
