@@ -17,10 +17,15 @@ CellList::CellList()
 	
 }
 //destructor
-CellList::~CellList() { }
+CellList::~CellList() 
+{ 
+	delete[] cells;
+}
 
 void CellList::SetSize(int rows, int columns)
 {
+	//prevents weird errors when resetting a cellList
+	lastCell[0] = -1;
 	//sets amount of rows and columns
 	this->rows = rows;
 	this->columns = columns;
@@ -206,11 +211,15 @@ void CellList::SpawnBombs(int bombAmount)
 }
 void CellList::ResetList()
 {
-	//TODO : Implement
+	// for(int i = 0; i < rows; i++)
+	// {
+		// delete cells[i];
+	// }
+	// delete cells;
 }
 
 //checks if the cursor is over a cell
-void CellList::OverCell(int x, int y)
+void CellList::OverCell(int x, int y, float zoomFactor)
 {
 	
 	for(int i = minRow ; i < maxRow; i++)
@@ -218,7 +227,7 @@ void CellList::OverCell(int x, int y)
 		for(int j = minCol; j < maxCol; j++)
 		{
 			
-			if((cells[i][j].GetX() <= x && cells[i][j].GetX()+40 >= x) && (cells[i][j].GetY() <= y && cells[i][j].GetY()+40 >= y))
+			if((cells[i][j].GetX() <= x && cells[i][j].GetX()+ (40 * zoomFactor) >= x) && (cells[i][j].GetY() <= y && cells[i][j].GetY()+ (40 * zoomFactor) >= y))
 			{	
 				cells[lastCell[0]][lastCell[1]].UnOver();
 				cells[i][j].SetOver();
@@ -232,14 +241,17 @@ void CellList::OverCell(int x, int y)
 //clicks the last cell that the mouse was over
 void CellList::ClickLastCell()
 {
-	//recursive clicking for all nearby cells if there are no nearby mines
-	if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
+	if(lastCell[0] != -1)
 	{
-		if(cells[lastCell[0]][lastCell[1]].GetNumMines() == 0 && !cells[lastCell[0]][lastCell[1]].IsMine() && !cells[lastCell[0]][lastCell[1]].IsFlagged())
+		//recursive clicking for all nearby cells if there are no nearby mines
+		if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
 		{
-			RecursiveClick(lastCell[0], lastCell[1]);
+			if(cells[lastCell[0]][lastCell[1]].GetNumMines() == 0 && !cells[lastCell[0]][lastCell[1]].IsMine() && !cells[lastCell[0]][lastCell[1]].IsFlagged())
+			{
+				RecursiveClick(lastCell[0], lastCell[1]);
+			}
+			cells[lastCell[0]][lastCell[1]].Click();
 		}
-		cells[lastCell[0]][lastCell[1]].Click();
 	}
 }
 
@@ -272,6 +284,26 @@ void CellList::RecursiveClick(int row, int col)
 			}
 		}
 	}
+}
+//win condition
+bool CellList::CheckWin()
+{
+	int cellsRemaining = 0, minesRemaining = 0;
+	for(int i = 0; i < rows; i++)
+	{
+		for(int j = 0; j < columns; j++)
+		{
+			if(!cells[i][j].IsClicked())
+			{
+				if(cells[i][j].IsMine())
+					minesRemaining++;
+				cellsRemaining++;
+			}
+		}
+	}
+	if(cellsRemaining == minesRemaining)
+		return true;
+	return false;
 }
 void CellList::Draw()
 {

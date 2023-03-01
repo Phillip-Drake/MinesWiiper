@@ -13,10 +13,11 @@ class CellList{
 		void SpawnBombs(int BombAmount);
 		void ResetList();
 		void Draw();
-		void OverCell(int x, int y);
+		void OverCell(int x, int y, float zoomFactor);
 		void ClickLastCell();
 		void FlagLastCell();
 		void RecursiveClick(int row, int col);
+		bool CheckWin();
 	private :
 		Cell** cells;	
 		int rows, columns, minRow, minCol, maxRow, maxCol;

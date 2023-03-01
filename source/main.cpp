@@ -93,6 +93,14 @@ int main(int argc, char **argv) {
 						firstPress = false;
 					}
 					game.ClickLastCell();
+					if(game.CheckWin())
+					{
+						gameRunning = false;
+						splashScreen = true;
+						gameStart = true;
+						firstPress = true;
+						game.ResetList();
+					}
 					justPressed = true;
 				}
 			}
@@ -108,7 +116,7 @@ int main(int argc, char **argv) {
 			{
 				justPressed = false;
 			}
-			game.OverCell(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
+			game.OverCell(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y, zoomFactor);
 			game.Draw();
 		}
 		else if(splashScreen)
