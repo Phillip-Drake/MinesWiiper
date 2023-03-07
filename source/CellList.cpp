@@ -22,8 +22,12 @@ CellList::~CellList()
 	delete[] cells;
 }
 
-void CellList::SetSize(int rows, int columns)
+void CellList::SetSize(int rows, int columns, int minX, int minY, int maxX, int maxY)
 {
+	this->minX = minX;
+	this->minY = minY;
+	this->maxX = maxX;
+	this->maxY = maxY;
 	//prevents weird errors when resetting a cellList
 	lastCell[0] = -1;
 	//sets amount of rows and columns
@@ -42,21 +46,21 @@ void CellList::SetSize(int rows, int columns)
 //spawns each cell
 void CellList::SpawnCells()
 {
-	int xOffSet, yOffSet;
-	if(rows % 2 == 1)
-		xOffSet = 320 - (rows / 2) * 20;
-	else
-		xOffSet = (int)(320.0 - (rows / 2.0) * 20.0);
-	if(columns % 2 == 1)
-		yOffSet = 226 - (columns / 2) * 20;
-	else
-		yOffSet = (int)(260.0 - (columns / 2.0) * 20.0);
+	// int xOffSet, yOffSet;
+	// if(rows % 2 == 1)
+		// xOffSet = 320 - (rows / 2) * 20;
+	// else
+		// xOffSet = (int)(320.0 - (rows / 2.0) * 20.0);
+	// if(columns % 2 == 1)
+		// yOffSet = 226 - (columns / 2) * 20;
+	// else
+		// yOffSet = (int)(260.0 - (columns / 2.0) * 20.0);
 	//creates cells at the required x and y values
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
-			cells[i][j].Spawn(i *20 +  xOffSet, j * 20 +  yOffSet);
+			cells[i][j].Spawn(i *20 +  minX, j * 20 +  minY);
 			cells[i][j].SetBasicImages(unClickedCell, highlightedCell, flaggedCell);
 		}
 	}
@@ -64,34 +68,34 @@ void CellList::SpawnCells()
 
 float CellList::GetInitialZoom()
 {
-	if(columns * 20.0 <= 480.0)
+	if(columns * 20.0 <= maxY)
 		return 1;
 	else
-		return 480.0 / (columns * 20.0);
+		return maxY / (columns * 20.0);
 }
 void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 {
-	int xOffSet, yOffSet;
-	if(rows % 2 == 1)
-		xOffSet = 320 - (rows / 2) * 20 * zoomFactor;
-	else
-		xOffSet = (int)(320.0 - (rows / 2.0) * 20.0 * zoomFactor);
-	if(columns % 2 == 1)
-		yOffSet = 226 - (columns / 2) * 20 * zoomFactor;
-	else
-		yOffSet = (int)(260.0 - (columns / 2.0) * 20.0 * zoomFactor);
+	// int xOffSet, yOffSet;
+	// if(rows % 2 == 1)
+		// xOffSet = 320 - (rows / 2) * 20 * zoomFactor;
+	// else
+		// xOffSet = (int)(320.0 - (rows / 2.0) * 20.0 * zoomFactor);
+	// if(columns % 2 == 1)
+		// yOffSet = 226 - (columns / 2) * 20 * zoomFactor;
+	// else
+		// yOffSet = (int)(260.0 - (columns / 2.0) * 20.0 * zoomFactor);
 	//creates cells at the required x and y values
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
-			cells[i][j].Spawn(i * 20 * zoomFactor +  xOffSet + xPan, j * 20 * zoomFactor +  yOffSet + yPan);
+			cells[i][j].Spawn(i * 20 * zoomFactor +  minX + xPan, j * 20 * zoomFactor +  minY + yPan);
 			//cells[i][j].Spawn(600, j * 20 * zoomFactor + yOffSet + yPan);
 			cells[i][j].SetZoom(zoomFactor);
 		}
 	}
 	//sets minimum rows seen on screen
-	if(cells[0][0].GetX() < -20)
+	if(cells[0][0].GetX() < minX - 20)
 	{
 		minRow = (0 - cells[0][0].GetX()) / (20 * zoomFactor);
 	}
@@ -100,25 +104,25 @@ void CellList::AdjustCells(float zoomFactor, int xPan, int yPan)
 		minRow = 0;
 	}
 	//sets maximum rows seen on screen
-	if(cells[rows - 1][columns - 1].GetX() > 640)
+	if(cells[rows - 1][columns - 1].GetX() > maxX)
 	{
-		maxRow = ((640 - cells[0][0].GetX()) / (20 * zoomFactor)) + 2;
+		maxRow = ((maxX - cells[0][0].GetX()) / (20 * zoomFactor)) + 2;
 		 if(maxRow > rows)
 			 maxRow = rows;
 	}
 	//sets minimim and maximum columns seen on screen
-	if(cells[0][0].GetY() < -40)
+	if(cells[0][0].GetY() < minY - 40)
 	{
-		minCol = (-40 - cells[0][0].GetY()) / (20 * zoomFactor);
+		minCol = (minY - 40 - cells[0][0].GetY()) / (20 * zoomFactor);
 	}
 	else
 	{
 		minCol = 0;
 	}
 	//sets maximum columns seen on screen
-	if(cells[rows - 1][columns - 1].GetY() > 500)
+	if(cells[rows - 1][columns - 1].GetY() > maxY + 20)
 	{
-		maxCol = ((500 - cells[0][0].GetY()) / (20 * zoomFactor)) + 2;
+		maxCol = ((maxY + 20 - cells[0][0].GetY()) / (20 * zoomFactor)) + 2;
 		 if(maxCol > columns)
 			 maxCol = columns;
 	}
@@ -176,48 +180,39 @@ void CellList::SpawnBombs(int bombAmount)
 			else
 			{
 				switch(cells[i][j].GetNumMines())
-					{
-						case 1:
-							cells[i][j].SetClickedImage(oneCell);
-							break;
-						case 2:
-							cells[i][j].SetClickedImage(twoCell);
-							break;
-						case 3:
-							cells[i][j].SetClickedImage(threeCell);
-							break;
-						case 4:
-							cells[i][j].SetClickedImage(fourCell);
-							break;
-						case 5:
-							cells[i][j].SetClickedImage(fiveCell);
-							break;
-						case 6:
-							cells[i][j].SetClickedImage(sixCell);
-							break;
-						case 7:
-							cells[i][j].SetClickedImage(sevenCell);
-							break;
-						case 8:
-							cells[i][j].SetClickedImage(eightCell);
-							break;
-						default:
-							cells[i][j].SetClickedImage(zeroCell);
-							break;
-					}
+				{
+					case 1:
+						cells[i][j].SetClickedImage(oneCell);
+						break;
+					case 2:
+						cells[i][j].SetClickedImage(twoCell);
+						break;
+					case 3:
+						cells[i][j].SetClickedImage(threeCell);
+						break;
+					case 4:
+						cells[i][j].SetClickedImage(fourCell);
+						break;
+					case 5:
+						cells[i][j].SetClickedImage(fiveCell);
+						break;
+					case 6:
+						cells[i][j].SetClickedImage(sixCell);
+						break;
+					case 7:
+						cells[i][j].SetClickedImage(sevenCell);
+						break;
+					case 8:
+						cells[i][j].SetClickedImage(eightCell);
+						break;
+					default:
+						cells[i][j].SetClickedImage(zeroCell);
+						break;
+				}
 			}
 		}
 	}
 }
-void CellList::ResetList()
-{
-	// for(int i = 0; i < rows; i++)
-	// {
-		// delete cells[i];
-	// }
-	// delete cells;
-}
-
 //checks if the cursor is over a cell
 void CellList::OverCell(int x, int y, float zoomFactor)
 {
@@ -229,35 +224,31 @@ void CellList::OverCell(int x, int y, float zoomFactor)
 			
 			if((cells[i][j].GetX() <= x && cells[i][j].GetX()+ (40 * zoomFactor) >= x) && (cells[i][j].GetY() <= y && cells[i][j].GetY()+ (40 * zoomFactor) >= y))
 			{	
-				cells[lastCell[0]][lastCell[1]].UnOver();
+				if(lastCell[0] != -1)
+					cells[lastCell[0]][lastCell[1]].UnOver();
 				cells[i][j].SetOver();
 				lastCell[0] = i;
 				lastCell[1] = j;
 			}
 		}
 	}
-	
 }
 //clicks the last cell that the mouse was over
 void CellList::ClickLastCell()
 {
-	if(lastCell[0] != -1)
+	if(lastCell[0] != -1 && !cells[lastCell[0]][lastCell[1]].IsFlagged())
 	{
 		//recursive clicking for all nearby cells if there are no nearby mines
-		if(!cells[lastCell[0]][lastCell[1]].IsFlagged())
+		if(cells[lastCell[0]][lastCell[1]].GetNumMines() == 0 && !cells[lastCell[0]][lastCell[1]].IsMine() && !cells[lastCell[0]][lastCell[1]].IsFlagged())
 		{
-			if(cells[lastCell[0]][lastCell[1]].GetNumMines() == 0 && !cells[lastCell[0]][lastCell[1]].IsMine() && !cells[lastCell[0]][lastCell[1]].IsFlagged())
-			{
-				RecursiveClick(lastCell[0], lastCell[1]);
-			}
-			cells[lastCell[0]][lastCell[1]].Click();
+			RecursiveClick(lastCell[0], lastCell[1]);
 		}
+		cells[lastCell[0]][lastCell[1]].Click();
 	}
 }
-
 void CellList::FlagLastCell()
 {
-	if(!cells[lastCell[0]][lastCell[1]].IsClicked())
+	if(lastCell[0] != -1 && !cells[lastCell[0]][lastCell[1]].IsClicked())
 	{
 		cells[lastCell[0]][lastCell[1]].Flag();
 	}
@@ -286,9 +277,14 @@ void CellList::RecursiveClick(int row, int col)
 	}
 }
 //win condition
-bool CellList::CheckWin()
+int CellList::CheckWinLose()
 {
 	int cellsRemaining = 0, minesRemaining = 0;
+	if(lastCell[0] != -1 && cells[lastCell[0]][lastCell[1]].IsMine())
+	{
+		Lose();
+		return 2;
+	}
 	for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
@@ -299,11 +295,23 @@ bool CellList::CheckWin()
 					minesRemaining++;
 				cellsRemaining++;
 			}
+			
 		}
 	}
 	if(cellsRemaining == minesRemaining)
-		return true;
-	return false;
+		return 1;
+	return 0;
+}
+void CellList::Lose()
+{
+	for(int i = 0; i < rows; i++)
+	{
+		for(int j = 0; j < columns; j++)
+		{
+			if(!cells[i][j].IsClicked() && cells[i][j].IsMine())
+				cells[i][j].Click();
+		}
+	}
 }
 void CellList::Draw()
 {

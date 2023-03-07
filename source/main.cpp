@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 		{
 			if(gameStart)
 			{
-				game.SetSize(begin.GetWidth(), begin.GetHeight());
+				game.SetSize(begin.GetWidth(), begin.GetHeight(), 0, 0, 200, 200);
 				game.SpawnCells();
 				gameStart = false;
 				zoomFactor = game.GetInitialZoom();
@@ -93,13 +93,22 @@ int main(int argc, char **argv) {
 						firstPress = false;
 					}
 					game.ClickLastCell();
-					if(game.CheckWin())
+					switch(game.CheckWinLose())
 					{
-						gameRunning = false;
-						splashScreen = true;
-						gameStart = true;
-						firstPress = true;
-						game.ResetList();
+						case 1: 
+							gameRunning = false;
+							splashScreen = true;
+							gameStart = true;
+							firstPress = true;
+							break;
+						case 2:
+							gameRunning = false;
+							splashScreen = true;
+							gameStart = true;
+							firstPress = true;
+							break;
+						default:
+							break;
 					}
 					justPressed = true;
 				}
