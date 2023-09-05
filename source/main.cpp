@@ -1,6 +1,4 @@
-#include <wiiuse/wpad.h>
-#include "CellList.h"
-#include "MainScreen.h"
+#include "GamePanel.h"
 using namespace wsp;
 Sprite cursor;
 Image cursorImage;
@@ -16,6 +14,7 @@ int main(int argc, char **argv) {
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	//MainScreen intiialization
 	MainScreen begin = MainScreen();
+	GamePanel test = GamePanel();
 	//Game initialization
 	CellList game = CellList();
 	game.SpawnCells();
@@ -34,9 +33,6 @@ int main(int argc, char **argv) {
 		//if the home button is pressed,
 		if(WPAD_ButtonsDown(WPAD_CHAN_0)&WPAD_BUTTON_HOME)
 			break;
-
-
-
 		ir_t ir;
 		WPAD_IR(WPAD_CHAN_0, &ir);
 		cursor.SetPosition(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y);
@@ -46,87 +42,59 @@ int main(int argc, char **argv) {
 		{
 			if(gameStart)
 			{
-				game.SetSize(begin.GetWidth(), begin.GetHeight(), 0, 0, 200, 200);
-				game.SpawnCells();
+				// game.SetSize(begin.GetWidth(), begin.GetHeight(), 0, 0, 200, 200);
+				// game.SpawnCells();
+				// gameStart = false;
+				// zoomFactor = game.GetInitialZoom();
+				// game.AdjustCells(zoomFactor, xPan, yPan);
+				test.Spawn(begin.GetWidth(), begin.GetHeight(), begin.GetMines());
 				gameStart = false;
-				zoomFactor = game.GetInitialZoom();
-				game.AdjustCells(zoomFactor, xPan, yPan);
 			}
-			if(pressed & WPAD_BUTTON_UP)
-			{
-				yPan -= 1;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_DOWN)
-			{
-				yPan += 1;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_LEFT)
-			{
-				xPan -= 1;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_RIGHT)
-			{
-				xPan += 1;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_PLUS)
-			{
-				zoomFactor += .01;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_MINUS)
-			{
-				zoomFactor -= .01;
-				game.AdjustCells(zoomFactor, xPan, yPan);
-			}
-			if(pressed & WPAD_BUTTON_A)
-			{
-				if(!justPressed)
-				{
-					if(firstPress)
-					{
-						//((begin.GetWidth() * begin.GetHeight()) / 10) * begin.GetMines()
-						game.SpawnBombs(((begin.GetWidth() * begin.GetHeight()) / 10) * begin.GetMines());
-						firstPress = false;
-					}
-					game.ClickLastCell();
-					switch(game.CheckWinLose())
-					{
-						case 1: 
-							gameRunning = false;
-							splashScreen = true;
-							gameStart = true;
-							firstPress = true;
-							break;
-						case 2:
-							gameRunning = false;
-							splashScreen = true;
-							gameStart = true;
-							firstPress = true;
-							break;
-						default:
-							break;
-					}
-					justPressed = true;
-				}
-			}
-			else if(pressed & WPAD_BUTTON_B)
-			{
-				if(!justPressed)
-				{
-					game.FlagLastCell();
-					justPressed = true;
-				}
-			}
-			else
-			{
-				justPressed = false;
-			}
-			game.OverCell(ir.sx - WSP_POINTER_CORRECTION_X, ir.sy - WSP_POINTER_CORRECTION_Y, zoomFactor);
-			game.Draw();
+			// if(pressed & WPAD_BUTTON_A)
+			// {
+				// if(!justPressed)
+				// {
+					// if(firstPress)
+					// {
+						// //((begin.GetWidth() * begin.GetHeight()) / 10) * begin.GetMines()
+						// game.SpawnBombs(((begin.GetWidth() * begin.GetHeight()) / 10) * begin.GetMines());
+						// firstPress = false;
+					// }
+					// game.ClickLastCell();
+					// switch(game.CheckWinLose())
+					// {
+						// case 1: 
+							// gameRunning = false;
+							// splashScreen = true;
+							// gameStart = true;
+							// firstPress = true;
+							// break;
+						// case 2:
+							// gameRunning = false;
+							// splashScreen = true;
+							// gameStart = true;
+							// firstPress = true;
+							// break;
+						// default:
+							// break;
+					// }
+					// justPressed = true;
+				// }
+			// }
+			// else if(pressed & WPAD_BUTTON_B)
+			// {
+				// if(!justPressed)
+				// {
+					// game.FlagLastCell();
+					// justPressed = true;
+				// }
+			// }
+			// else
+			// {
+				// justPressed = false;
+			// }
+			test.Update(pressed, ir);
+			test.Draw();
 		}
 		else if(splashScreen)
 		{

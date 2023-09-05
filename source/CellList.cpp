@@ -144,7 +144,7 @@ void CellList::SpawnBombs(int bombAmount)
 			randRow = std::rand() % rows;
 			randCol = std::rand() % columns;
 		}
-		cells[randRow][randCol].SetMine();
+		//cells[randRow][randCol].SetMine();
 	}
 	int currRow, currCol;
 	for(int i = 0; i < rows; i++)
