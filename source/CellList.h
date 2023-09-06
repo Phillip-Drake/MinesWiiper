@@ -1,4 +1,5 @@
 #include "Cell.h"
+#include "Explosion.h"
 using namespace wsp;
 class CellList{
 
@@ -23,4 +24,6 @@ class CellList{
 		int rows, columns, minRow, minCol, maxRow, maxCol, minX, minY, maxX, maxY;
 		int lastCell[2];
 		Image unClickedCell, highlightedCell, mineCell, flaggedCell, zeroCell, oneCell, twoCell, threeCell, fourCell, fiveCell, sixCell, sevenCell, eightCell;
+		bool hasLost;
+		Explosion loseExplosion;
 };

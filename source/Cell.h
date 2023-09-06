@@ -42,6 +42,7 @@ class Cell {
 		bool IsFlagged();
 		int GetX();
 		int GetY();
+		float GetZoom();
 	//TODO : setMine() incrementNumMines() functions
 	private : 
 	//essential information for a cell, determines it's position,

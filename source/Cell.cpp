@@ -60,7 +60,10 @@ void Cell::SetZoom(float zoomFactor)
 	highlightedSprite.SetZoom(zoomFactor);
 	clickedSprite.SetZoom(zoomFactor);
 	flaggedSprite.SetZoom(zoomFactor);
-	
+}
+float Cell::GetZoom()
+{
+	return unclickedSprite.GetZoom();
 }
 //increases the amount of mines next to the cell by one
 //my program iteratively increases the amount of mines next to the cell through many checks, so the value cannot be directly assigned

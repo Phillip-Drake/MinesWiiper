@@ -14,7 +14,8 @@ CellList::CellList()
 	sixCell.LoadImage(sixCell_png, IMG_LOAD_TYPE_BUFFER);
 	sevenCell.LoadImage(sevenCell_png, IMG_LOAD_TYPE_BUFFER);
 	eightCell.LoadImage(eightCell_png, IMG_LOAD_TYPE_BUFFER);
-	
+	loseExplosion = Explosion();
+	hasLost = false;
 }
 //destructor
 CellList::~CellList() 
@@ -144,7 +145,7 @@ void CellList::SpawnBombs(int bombAmount)
 			randRow = std::rand() % rows;
 			randCol = std::rand() % columns;
 		}
-		//cells[randRow][randCol].SetMine();
+		cells[randRow][randCol].SetMine();
 	}
 	int currRow, currCol;
 	for(int i = 0; i < rows; i++)
@@ -253,6 +254,8 @@ void CellList::FlagLastCell()
 		cells[lastCell[0]][lastCell[1]].Flag();
 	}
 }
+//clicks the cell which the cursor is on
+//IF the cell contains 0 mines, clicks every cell around that cell IF the cell hasn't already been clicket yet
 void CellList::RecursiveClick(int row, int col)
 {
 	int currRow, currCol;
@@ -277,13 +280,15 @@ void CellList::RecursiveClick(int row, int col)
 	}
 }
 //win condition
+//return 1 if Win, return 2 if Lose, else return 0
 int CellList::CheckWinLose()
 {
 	int cellsRemaining = 0, minesRemaining = 0;
 	if(lastCell[0] != -1 && cells[lastCell[0]][lastCell[1]].IsMine())
 	{
 		Lose();
-		return 2;
+		hasLost = true;
+		return 0;
 	}
 	for(int i = 0; i < rows; i++)
 	{
@@ -312,6 +317,7 @@ void CellList::Lose()
 				cells[i][j].Click();
 		}
 	}
+	loseExplosion.SetPosition(cells[lastCell[0]][lastCell[1]].GetX() - 44 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom(), cells[lastCell[0]][lastCell[1]].GetY() - 48 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom());
 }
 void CellList::Draw()
 {
@@ -322,4 +328,6 @@ void CellList::Draw()
 			cells[i][j].Draw();
 		}
 	}
+	if(hasLost)
+		loseExplosion.Draw();
 }
