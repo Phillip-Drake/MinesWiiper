@@ -12,10 +12,10 @@ Contains features not available in other Minesweeper clones!
 2. Place "Minesweeper" folder into homebrew/apps on your Wii's sd card
 3. Open the homebrew app and launch the game!
 
-## DISCLAIMER
+## Disclaimer
 This project is in active development, expect functionality to change across releases
 
-## TODO
+## Todo
 - Timer
 - Multiplayer
 - Redo title screen
