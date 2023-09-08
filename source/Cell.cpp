@@ -111,7 +111,8 @@ void Cell::UnOver()
 	isOver = false;
 }
 //draws the cell
-void Cell::Draw(){
+void Cell::Draw()
+{
 	if(!isClicked)
 	{
 		if(isFlagged)

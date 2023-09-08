@@ -135,6 +135,7 @@ void CellList::SpawnBombs(int bombAmount)
 	srand(time(NULL));
 	//generates bombAmount amount of bombs
 	int randRow, randCol;
+	int currRow, currCol;
 	for(int i = 0; i < bombAmount; i++)
 	{
 		randRow = std::rand() % rows;
@@ -146,31 +147,62 @@ void CellList::SpawnBombs(int bombAmount)
 			randCol = std::rand() % columns;
 		}
 		cells[randRow][randCol].SetMine();
-	}
-	int currRow, currCol;
-	for(int i = 0; i < rows; i++)
-	{
-		for(int j = 0; j < columns; j++)
+		//sets clicked image for mines
+		cells[randRow][randCol].SetClickedImage(mineCell);
+		//loops through all of the cells bordering the mine, and increments their bombAmount by 1
+		for(int k = -1; k <= 1; k++)
 		{
-			if(cells[i][j].IsMine())
+			for(int g = -1; g <= 1; g++)
 			{
-				//re-reformed numbering system
-				for(int k = -1; k < 2; k++)
+				currRow = randRow + k;
+				currCol = randCol + g;
+				
+				if((currRow >= 0 && currRow < rows) && (currCol >= 0 && currCol < columns))
 				{
-					for(int g = -1; g < 2; g++)
+					cells[currRow][currCol].IncrementNumMines();
+					//sets images for all cells which border a mine
+					//results in images being set for the same cell multiple times, but is still faster than doing a second loop over every cell to set images
+					if(!cells[currRow][currCol].IsMine())
 					{
-						currRow = i + k;
-						currCol = j + g;
-						if((currRow >= 0 && currRow < rows) && (currCol >= 0 && currCol < columns))
-							cells[currRow][currCol].IncrementNumMines();
+						switch(cells[currRow][currCol].GetNumMines())
+						{
+							case 1:
+								cells[currRow][currCol].SetClickedImage(oneCell);
+								break;
+							case 2:
+								cells[currRow][currCol].SetClickedImage(twoCell);
+								break;
+							case 3:
+								cells[currRow][currCol].SetClickedImage(threeCell);
+								break;
+							case 4:
+								cells[currRow][currCol].SetClickedImage(fourCell);
+								break;
+							case 5:
+								cells[currRow][currCol].SetClickedImage(fiveCell);
+								break;
+							case 6:
+								cells[currRow][currCol].SetClickedImage(sixCell);
+								break;
+							case 7:
+								cells[currRow][currCol].SetClickedImage(sevenCell);
+								break;
+							case 8:
+								cells[currRow][currCol].SetClickedImage(eightCell);
+								break;
+							default:
+								cells[currRow][currCol].SetClickedImage(zeroCell);
+								break;
+						}
 					}
 				}
 			}
 		}
 	}
+	
 	//requires second loop in order to set cell-images
-	//TODO : Add possibly set images at draw? I'm not actually sure if that would be faster
-	for(int i = 0; i < rows; i++)
+	//TODO :possibly set images at draw? I'm not actually sure if that would be faster
+	/*for(int i = 0; i < rows; i++)
 	{
 		for(int j = 0; j < columns; j++)
 		{
@@ -212,12 +244,11 @@ void CellList::SpawnBombs(int bombAmount)
 				}
 			}
 		}
-	}
+	}*/
 }
 //checks if the cursor is over a cell
 void CellList::OverCell(int x, int y, float zoomFactor)
 {
-	
 	for(int i = minRow ; i < maxRow; i++)
 	{
 		for(int j = minCol; j < maxCol; j++)
@@ -242,6 +273,7 @@ void CellList::ClickLastCell()
 		//recursive clicking for all nearby cells if there are no nearby mines
 		if(cells[lastCell[0]][lastCell[1]].GetNumMines() == 0 && !cells[lastCell[0]][lastCell[1]].IsMine() && !cells[lastCell[0]][lastCell[1]].IsFlagged())
 		{
+			cells[lastCell[0]][lastCell[1]].SetClickedImage(zeroCell);
 			RecursiveClick(lastCell[0], lastCell[1]);
 		}
 		cells[lastCell[0]][lastCell[1]].Click();
@@ -317,7 +349,7 @@ void CellList::Lose()
 				cells[i][j].Click();
 		}
 	}
-	loseExplosion.SetPosition(cells[lastCell[0]][lastCell[1]].GetX() - 44 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom(), cells[lastCell[0]][lastCell[1]].GetY() - 48 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom());
+	//loseExplosion.SetPosition(cells[lastCell[0]][lastCell[1]].GetX() - 44 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom(), cells[lastCell[0]][lastCell[1]].GetY() - 48 + 10 * cells[lastCell[0]][lastCell[1]].GetZoom());
 }
 void CellList::Draw()
 {
@@ -328,6 +360,6 @@ void CellList::Draw()
 			cells[i][j].Draw();
 		}
 	}
-	if(hasLost)
-		loseExplosion.Draw();
+	//if(hasLost)
+		//loseExplosion.Draw();
 }
