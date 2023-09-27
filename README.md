@@ -19,3 +19,5 @@ This project is in active development, expect functionality to change across rel
 - Timer
 - Multiplayer
 - Redo title screen
+
+## WARNING : This project is in early Alpha development, expect select features to be either absent or incomplete
